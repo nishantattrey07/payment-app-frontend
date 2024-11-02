@@ -1,14 +1,16 @@
 import { useRecoilState } from "recoil";
 import { useCallback, memo } from "react";
 import InputBox from "./InputBox";
+import axios  from "axios";
 import { FirstName, LastName, Email, Password } from "../store/atoms/forms";
 import { useNavigate } from "react-router-dom";
+
 
 const SignUp = () => {
     const navigate = useNavigate();
   const [firstName, setFirstName] = useRecoilState(FirstName);
   const [lastName, setLastName] = useRecoilState(LastName);
-  const [email, setEmail] = useRecoilState(Email);
+  const [username, setUsername] = useRecoilState(Email);
   const [password, setPassword] = useRecoilState(Password);
 
 
@@ -28,9 +30,9 @@ const SignUp = () => {
 
   const handleEmailChange = useCallback(
     (value) => {
-      setEmail(value);
+      setUsername(value);
     },
-    [setEmail]
+    [setUsername]
   );
 
   const handlePasswordChange = useCallback(
@@ -41,12 +43,28 @@ const SignUp = () => {
   );
 
 
-  const handleClick = useCallback(() => {
+    const handleClick =  async () => {
+       try {
+      const response = await axios.post('http://localhost:3000/api/v1/user/signup', {
+        username,
+        firstName,
+        lastName,
+        password
+      });
+           const token  = response.data.token;
+           localStorage.setItem("authToken", token);
+           
+           
+      navigate('/dashboard')
+    } catch (error) {
+      console.error('Error signing up:', error);
+      
+    }
     setFirstName("");
     setLastName("");
-    setEmail("");
+    setUsername("");
     setPassword("");
-  }, [setFirstName, setLastName, setEmail, setPassword]);
+  }
 
   return (
     <div className="flex items-center justify-center">
@@ -73,7 +91,7 @@ const SignUp = () => {
           <InputBox
             label="Email"
             placeholder="nishant@gmail.com"
-            value={email}
+            value={username}
             onChange={handleEmailChange}
           />
           <InputBox
@@ -94,7 +112,14 @@ const SignUp = () => {
           </button>
           <div className="py-2 text-sm mb-3 flex justify-center">
             <div>Already have an account?</div>
-                      <a className="pointer underline pl-1 cursor-pointer" onClick={() => {navigate("/signin")}}>Sign in</a>
+            <a
+              className="pointer underline pl-1 cursor-pointer"
+              onClick={() => {
+                navigate("/signin");
+              }}
+            >
+              Sign in
+            </a>
           </div>
         </div>
       </div>

@@ -1,26 +1,42 @@
 import { useNavigate } from "react-router-dom";
 import InputBox from "./InputBox";
 import { useCallback, useState } from "react";
+import axios from "axios";
 
 export default function SignIn() {
     const navigate = useNavigate();
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const handleEmailChange = useCallback((value) => {
-        setEmail(value);
+        setUsername(value);
         
-    },[setEmail])
+    },[setUsername])
 
     const handlePasswordChange = useCallback((value) => { 
         setPassword(value);
     },[setPassword])
 
 
-    const handleClick = useCallback(() => { 
-        setEmail("")
+    const handleClick = async () => {
+        try {
+            const response = await axios.post(
+                "http://localhost:3000/api/v1/user/signin"
+            , { 
+                username,
+                password
+                });
+            const token = response.data.token;
+            localStorage.setItem("authToken", token);
+            navigate("/dashboard");
+        }
+        catch (err) {
+            console.error('Error signing in:', err);
+        }
+
+        setUsername("")
         setPassword("")
-    },[setEmail,setPassword])
+    };
 
     const transferPage = () => {
         navigate("/signup");
@@ -40,7 +56,7 @@ export default function SignIn() {
               <InputBox
                 label={"Email"}
                 placeholder={"nishant@gmail.com"}
-                value={email}
+                value={username}
                 onChange={handleEmailChange}
               />
 
