@@ -1,15 +1,13 @@
-
-import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import SignIn from "./components/Signin";
-import SignUp from "./components/Signup";
-import Dashboard from "./components/Dashboard";
-import  SendMoney  from './components/SendMoney';
-import  LandingPage from './components/LandingPage';
-import { RecoilRoot } from 'recoil';
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { RecoilRoot } from "recoil";
+import "./App.css";
+import Dashboard from "./pages/Dashboard";
+import LandingPage from "./pages/LandingPage";
+import SendMoney from "./pages/SendMoney";
+import SignIn from "./pages/Signin";
+import SignUp from "./pages/Signup";
 
 function App() {
-
   return (
     <>
       <RecoilRoot>
@@ -27,4 +25,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

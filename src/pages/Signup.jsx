@@ -1,18 +1,16 @@
-import { useRecoilState } from "recoil";
-import { useCallback, memo } from "react";
-import InputBox from "./InputBox";
-import axios  from "axios";
-import { FirstName, LastName, Email, Password } from "../store/atoms/forms";
+import axios from "axios";
+import { memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useRecoilState } from "recoil";
+import InputBox from "../components/InputBox";
+import { Email, FirstName, LastName, Password } from "../store/atoms/forms";
 
 const SignUp = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useRecoilState(FirstName);
   const [lastName, setLastName] = useRecoilState(LastName);
   const [username, setUsername] = useRecoilState(Email);
   const [password, setPassword] = useRecoilState(Password);
-
 
   const handleFirstNameChange = useCallback(
     (value) => {
@@ -42,29 +40,29 @@ const SignUp = () => {
     [setPassword]
   );
 
+  const handleClick = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/user/signup",
+        {
+          username,
+          firstName,
+          lastName,
+          password,
+        }
+      );
+      const token = response.data.token;
+      localStorage.setItem("authToken", token);
 
-    const handleClick =  async () => {
-       try {
-      const response = await axios.post('http://localhost:3000/api/v1/user/signup', {
-        username,
-        firstName,
-        lastName,
-        password
-      });
-           const token  = response.data.token;
-           localStorage.setItem("authToken", token);
-           
-           
-      navigate('/dashboard')
+      navigate("/dashboard");
     } catch (error) {
-      console.error('Error signing up:', error);
-      
+      console.error("Error signing up:", error);
     }
     setFirstName("");
     setLastName("");
     setUsername("");
     setPassword("");
-  }
+  };
 
   return (
     <div className="flex items-center justify-center">
