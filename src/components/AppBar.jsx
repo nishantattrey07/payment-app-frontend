@@ -10,7 +10,7 @@ const AppBar = memo(({name,nameFirstLetter})=> {
 
                 <div className="flex  items-center gap-2 mx-2">
                 <h1 className="font-medium text-lg">{name}</h1>
-                <button className=" bg-slate-200 rounded-full p-2 font-bold">{nameFirstLetter}</button>
+                <button className=" bg-slate-200 rounded-full px-4 py-2 font-bold">{nameFirstLetter}</button>
                 </div>
         </div>
         

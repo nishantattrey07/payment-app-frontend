@@ -1,11 +1,14 @@
-// Users.jsx
 import { useDebounceSearch } from "../hooks/useDebounceSearch";
 
 export const Users = () => {
   const endpoint = "http://localhost:3000/api/v1/user/searchUsers";
-  const { delay, page, limit } = { delay: 300, page: 1, limit: 2 };
+  const { delay, page, limit } = { delay: 300, page: 1, limit: 5 };
 
-  const { results = [], querySearch, handleSearch } = useDebounceSearch({endpoint,delay,page,limit});
+  const {
+    results = [],
+    querySearch,
+    handleSearch,
+  } = useDebounceSearch({ endpoint, delay, page, limit });
 
   console.log(results);
 
@@ -28,9 +31,22 @@ export const Users = () => {
         <ul>
           {Array.isArray(results) && results.length > 0 ? (
             results.map((user) => (
-              <li key={user.id} className="p-2 border-b border-gray-300">
-                {user.username}
-              </li>
+              <div
+                key={user._id}
+                className="p-2 border-b border-gray-300 flex justify-between min-w-[300px]"
+              >
+                <div className="flex gap-2 items-center">
+                  <div className="bg-gray-300 rounded-full px-4 py-2">
+                    {user.firstName[0]} </div>
+                  <h1 className="font-normal">
+                    {user.firstName} {user.lastName}
+                  </h1>
+                </div>
+
+                <button className="px-5 py-1 bg-black bordered rounded text-white text-sm">
+                  Send Money
+                </button>
+              </div>
             ))
           ) : (
             <li className="text-gray-500 p-2">No users found</li>

@@ -2,13 +2,13 @@ import { useState, useEffect, useCallback } from "react";
 import debounce from "lodash.debounce";
 import axios from "axios";
 
-export const useDebounceSearch = ({endpoint,delay,page,limit}) => {
-    const [results, setResults] = useState([]);
-    const [querySearch,setQuerySearch] = useState("")
+export const useDebounceSearch = ({ endpoint, delay, page, limit }) => {
+  const [results, setResults] = useState([]);
+  const [querySearch, setQuerySearch] = useState("");
   const [error, setError] = useState(null);
 
-  const debouncedFetchUsers = useCallback(
-    debounce(async (searchQuery) => {
+  const fetchUsers = useCallback(
+    async (searchQuery) => {
       try {
         const token = localStorage.getItem("authToken");
         if (!token) throw new Error("No auth token found");
@@ -27,28 +27,34 @@ export const useDebounceSearch = ({endpoint,delay,page,limit}) => {
 
         const response = await axios.get(endpoint, config);
 
-        setResults(response.data.user);
+        setResults(response.data.users || []);
         setError(null);
       } catch (err) {
         setError(err.message || "Error fetching search results");
         console.error("Error fetching search results:", err);
       }
-    }, delay),
-    [page, limit, endpoint, delay]
+    },
+    [endpoint, limit, page]
+  );
+
+  const debouncedSearch = useCallback(
+    debounce((searchQuery) => fetchUsers(searchQuery), delay),
+    [fetchUsers, delay]
   );
 
   const handleSearch = (e) => {
-      const newQuery = e.target.value;
-        setQuerySearch(newQuery)
-    debouncedFetchUsers(newQuery);
+    const newQuery = e.target.value;
+    setQuerySearch(newQuery);
+    debouncedSearch(newQuery);
   };
 
-
   useEffect(() => {
-    return () => {
-      debouncedFetchUsers.cancel();
-    };
-  }, [debouncedFetchUsers]);
+    fetchUsers("default");
 
-  return { results,querySearch, error, handleSearch };
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [fetchUsers, debouncedSearch]);
+
+  return { results, querySearch, error, handleSearch };
 };

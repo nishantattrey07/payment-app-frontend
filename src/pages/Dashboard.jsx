@@ -30,7 +30,7 @@ export default function Dashboard() {
         <Balance Balance={balance}/>
       </div>
 
-      <div>
+      <div className="p-4 mt-4 mx-4">
         <Users/>
       </div>
     </div>
