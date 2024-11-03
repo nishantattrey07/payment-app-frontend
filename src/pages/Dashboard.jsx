@@ -31,7 +31,7 @@ export default function Dashboard() {
       </div>
 
       <div>
-        <Users />
+        <Users/>
       </div>
     </div>
   );
