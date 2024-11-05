@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import InputBox from "../components/InputBox";
 import { Email, FirstName, LastName, Password } from "../store/atoms/forms";
+import { isAuthenticated } from "../store/atoms/auth";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ const SignUp = () => {
   const [lastName, setLastName] = useRecoilState(LastName);
   const [username, setUsername] = useRecoilState(Email);
   const [password, setPassword] = useRecoilState(Password);
+  const isAuth = useRecoilState(isAuthenticated);
 
   const handleFirstNameChange = useCallback(
     (value) => {
@@ -53,7 +55,7 @@ const SignUp = () => {
       );
       const token = response.data.token;
       localStorage.setItem("authToken", token);
-
+      isAuth(true);
       navigate("/dashboard");
     } catch (error) {
       console.error("Error signing up:", error);

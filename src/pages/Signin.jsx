@@ -2,11 +2,14 @@ import axios from "axios";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InputBox from "../components/InputBox";
+import {  useSetRecoilState } from "recoil";
+import { isAuthenticated } from "../store/atoms/auth";
 
 export default function SignIn() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const isAuth = useSetRecoilState(isAuthenticated);
 
   const handleEmailChange = useCallback(
     (value) => {
@@ -33,6 +36,7 @@ export default function SignIn() {
       );
       const token = response.data.token;
       localStorage.setItem("authToken", token);
+      isAuth(true);
       navigate("/dashboard");
     } catch (err) {
       console.error("Error signing in:", err);

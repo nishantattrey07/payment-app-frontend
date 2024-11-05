@@ -7,6 +7,7 @@ import SendMoney from "./pages/SendMoney";
 import SignIn from "./pages/Signin";
 import SignUp from "./pages/Signup";
 import PaymentCompleted from "./pages/PaymentCompleted";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -17,9 +18,18 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/sendmoney" element={<SendMoney />} />
-            <Route path="/paymentCompleted" element={<PaymentCompleted />} />
+            <Route
+              path="/dashboard"
+              element={<PrivateRoute component={<Dashboard />} />}
+            />
+            <Route
+              path="/sendmoney"
+              element={<PrivateRoute component={<SendMoney />} />}
+            />
+            <Route
+              path="/paymentCompleted"
+              element={<PrivateRoute component={<PaymentCompleted />} />}
+            />
           </Routes>
         </Router>
       </RecoilRoot>
