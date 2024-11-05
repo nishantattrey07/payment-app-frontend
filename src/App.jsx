@@ -6,6 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import SendMoney from "./pages/SendMoney";
 import SignIn from "./pages/Signin";
 import SignUp from "./pages/Signup";
+import PaymentCompleted from "./pages/PaymentCompleted";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/sendmoney" element={<SendMoney />} />
+            <Route path="/paymentCompleted" element={<PaymentCompleted />} />
           </Routes>
         </Router>
       </RecoilRoot>

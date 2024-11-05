@@ -18,7 +18,7 @@ export const useUserBalance = () => {
                     headers: {
                       Authorization: `Bearer ${token}`,
                       "Content-Type": "application/json",
-                    },
+                    }
                   }
                 );
                 setBalance(response.data.balance);

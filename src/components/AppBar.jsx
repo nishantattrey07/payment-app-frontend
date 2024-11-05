@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { memo } from "react";
-const AppBar = memo(({name,nameFirstLetter})=> { 
+const AppBar = memo(({name,nameFirstLetter,onClick})=> { 
     return (
         
             <div className="shadow-md flex flex-row justify-between sticky top-0 border-b p-2 min-w-[300px] gap-3">
@@ -10,7 +10,7 @@ const AppBar = memo(({name,nameFirstLetter})=> {
 
                 <div className="flex  items-center gap-2 mx-2">
                 <h1 className="font-medium text-lg">{name}</h1>
-                <button className=" bg-slate-200 rounded-full px-4 py-2 font-bold">{nameFirstLetter}</button>
+                <button className=" bg-slate-200 rounded-full px-4 py-2 font-bold" onClick={onClick}>{nameFirstLetter}</button>
                 </div>
         </div>
         

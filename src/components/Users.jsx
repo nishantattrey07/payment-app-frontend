@@ -1,6 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import { useDebounceSearch } from "../hooks/useDebounceSearch";
+import { useSetRecoilState } from "recoil";
+import { sendToUserFullName,toUsername } from "../store/atoms/user";
 
 export const Users = () => {
+  const setSendToUserFullName = useSetRecoilState(sendToUserFullName);
+  const setToUsername = useSetRecoilState(toUsername);
+  const navigate = useNavigate();
+
   const endpoint = "http://localhost:3000/api/v1/user/searchUsers";
   const { delay, page, limit } = { delay: 300, page: 1, limit: 5 };
 
@@ -31,6 +38,7 @@ export const Users = () => {
         <ul>
           {Array.isArray(results) && results.length > 0 ? (
             results.map((user) => (
+            
               <div
                 key={user._id}
                 className="p-2 border-b border-gray-300 flex justify-between min-w-[300px]"
@@ -43,7 +51,11 @@ export const Users = () => {
                   </h1>
                 </div>
 
-                <button className="px-5 py-1 bg-black bordered rounded text-white text-sm">
+                <button className="px-5 py-1 bg-black bordered rounded text-white text-sm" onClick={() => {
+                  setToUsername(user.username);
+                  setSendToUserFullName(user.firstName + " " + user.lastName);
+                  navigate("/SendMoney")
+                }}>
                   Send Money
                 </button>
               </div>

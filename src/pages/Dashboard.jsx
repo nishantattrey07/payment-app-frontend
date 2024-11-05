@@ -3,10 +3,27 @@ import { Balance } from "../components/Balance";
 import { useUserProfile } from "../hooks/useUserProfile";
 import { useUserBalance } from "../hooks/useUserBalance";
 import { Users } from "../components/Users";
+import { useSetRecoilState } from "recoil";
+import { token } from "../store/atoms/user";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { profile, error } = useUserProfile();
-  const {balance, error1} = useUserBalance();
+  const { balance, error1 } = useUserBalance();
+  const navigate = useNavigate();
+  const setToken = useSetRecoilState(token);
+
+  const handleLogout = () => { 
+    localStorage.removeItem("authToken");
+    navigate('/signin');
+  }
+
+  const authToken = localStorage.getItem("authToken");
+  if (!authToken) {
+    navigate('/login');
+  } else {
+    setToken(authToken);
+  }
 
   if (error) {
     return <div className="error-message">Error: {error.message}</div>;
@@ -24,14 +41,18 @@ export default function Dashboard() {
 
   return (
     <div>
-      <AppBar name={profile.firstName} nameFirstLetter={profile.firstName[0]} />
+      <AppBar
+        name={profile.firstName}
+        nameFirstLetter={profile.firstName[0]}
+        onClick={handleLogout}
+      />
 
       <div className="p-4 mt-4 mx-4">
-        <Balance Balance={balance}/>
+        <Balance Balance={balance} />
       </div>
 
       <div className="p-4 mt-4 mx-4">
-        <Users/>
+        <Users />
       </div>
     </div>
   );
